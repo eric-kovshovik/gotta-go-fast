@@ -1,0 +1,22 @@
+{
+  "name": "gotta-go-fast",
+  "version": "1.0.0",
+  "description": "Shows what Chris have done",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eric-kovshovik/gotta-go-fast.git"
+  },
+  "author": "Eric Kovshovik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eric-kovshovik/gotta-go-fast/issues"
+  },
+  "homepage": "https://github.com/eric-kovshovik/gotta-go-fast#readme",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}

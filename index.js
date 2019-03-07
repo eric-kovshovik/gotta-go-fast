@@ -4,22 +4,32 @@ let AWS = require('aws-sdk');
 var request = require('request');
 
 exports.handler = function(event, context) {
-    request({
-      url: 'https://api.github.com/users/cgregs32/events',
-      method: 'GET',
-    }, function (error, response, body) {
+    var options = {
+        url: 'https://api.github.com/users/eric-kovshovik/events',
+        headers: {  
+            'User-Agent': 'request'
+        }
+    };
+    
+    function callback (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log(body);
             var obj = JSON.parse(body);
+            var filtered = obj.filter(function(x) { return x.type == "PushEvent"; });
             
-            // var email_params = {
+            var date = new Date();
+            var dayAgo = date.setDate(date.getDate() -1);
+            var dates = filtered.map(x => Date.parse(x.created_at)).filter(function(x) { return x >= dayAgo; });
+            console.log(dates.length);
+            
+            // var sms_params = {
             //     Message: quote,
-            //     Subject: "Test Email From Lambda",
+            //     Subject: "Test SNS From Lambda",
             //     TopicArn: process.env.TOPIC_ARN
             // };
-            // sns.publish(email_params, context.done);
+            // sns.publish(sms_params, context.done);
         }
-      }
-    );    
+    }
+    
+    request(options, callback);    
 };
 

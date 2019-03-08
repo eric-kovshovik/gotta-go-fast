@@ -1,11 +1,11 @@
 'use strict'
 let AWS = require('aws-sdk');
-// var sns = new AWS.SNS();
+var sns = new AWS.SNS();
 var request = require('request');
 
 exports.handler = function(event, context) {
     var options = {
-        url: 'https://api.github.com/users/eric-kovshovik/events',
+        url: `https://api.github.com/users/${process.env.USERNAME}/events`,
         headers: {  
             'User-Agent': 'request'
         }
@@ -19,14 +19,13 @@ exports.handler = function(event, context) {
             var date = new Date();
             var dayAgo = date.setDate(date.getDate() -1);
             var dates = filtered.map(x => Date.parse(x.created_at)).filter(function(x) { return x >= dayAgo; });
-            console.log(dates.length);
             
-            // var sms_params = {
-            //     Message: quote,
-            //     Subject: "Test SNS From Lambda",
-            //     TopicArn: process.env.TOPIC_ARN
-            // };
-            // sns.publish(sms_params, context.done);
+            var email_params = {
+                Message: `Number of public pushes by Eric in 24h: ${dates.length}`,
+                Subject: "Hey there fella",
+                TopicArn: process.env.TOPIC_ARN
+            };
+            sns.publish(email_params, context.done);
         }
     }
     
